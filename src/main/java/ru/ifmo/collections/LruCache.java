@@ -16,7 +16,6 @@ import java.util.LinkedList;
  */
 public class LruCache<K, V> {
     HashMap<K, V> hashMap = new HashMap();
-    HashSet<K> hashSet = new HashSet<>();
     LinkedList<K> linkedList = new LinkedList<>();
     int capacity;
 
@@ -25,7 +24,7 @@ public class LruCache<K, V> {
     }
 
     public V get(K key) {
-        if (hashSet.contains(key)) {
+        if (hashMap.get(key) != null) {
             linkedList.remove(key);
             linkedList.add(key);
         }
@@ -33,15 +32,13 @@ public class LruCache<K, V> {
     }
 
     public void put(K key, V value) {
-        if (hashSet.size() >= capacity) {
+        if (hashMap.size() >= capacity) {
             K removeKey = linkedList.getFirst();
             linkedList.remove(removeKey);
-            hashSet.remove(removeKey);
             hashMap.remove(removeKey);
 
         }
         hashMap.put(key, value);
-        hashSet.add(key);
         linkedList.add(key);
     }
 

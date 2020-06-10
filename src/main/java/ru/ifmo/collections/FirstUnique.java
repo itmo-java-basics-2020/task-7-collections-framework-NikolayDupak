@@ -1,9 +1,13 @@
 package ru.ifmo.collections;
 
 import java.nio.charset.IllegalCharsetNameException;
+import java.util.ArrayDeque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
 /**
  * Design a class which contains integers and returns first unique integer (in order of addition).
@@ -11,42 +15,31 @@ import java.util.LinkedList;
  */
 
 public class FirstUnique {
-    HashSet<Integer> hashSet = new HashSet();
-
-    LinkedList<Integer> listQueue = new LinkedList();
+    private Map<Integer, Integer> map;
+    private Queue<Integer> queue;
 
     public FirstUnique(int[] numbers) {
-
-        for (int elem = 0; elem < numbers.length; elem++) {
-            this.add(numbers[elem]);
+        map = new HashMap<>();
+        queue = new ArrayDeque<>();
+        for (int number : numbers) {
+            this.add(number);
         }
     }
 
     public int showFirstUnique() {
-        if(listQueue.isEmpty()){
-            return -1;
+        while (!queue.isEmpty() && map.get(queue.element()) > 1) {
+            queue.remove();
         }
-
-        return listQueue.getFirst();
+        return (queue.isEmpty() ? -1 : queue.element());
     }
 
     public void add(int value) {
-        if (!hashSet.contains(value)) {
-            hashSet.add(value);
-            listQueue.add(value);
+        queue.add(value);
+        if (map.get(value) != null) {
+            map.put(value, map.get(value) + 1);
+            return;
+        }
 
-        }
-        else {
-            Iterator<Integer> iterator = listQueue.iterator();
-            while(iterator.hasNext())
-            {
-                Integer val = iterator.next();
-                if (val.equals(value))
-                {
-                    iterator.remove();
-                    break;
-                }
-            }
-        }
+        map.put(value, 1);
     }
 }

@@ -34,6 +34,14 @@ public class SortedSet<T> extends AbstractSet<T> {
         return new SortedSet<>(comparator);
     }
 
+    private SortedSet() {
+        this.contents = new TreeMap<>();
+    }
+
+    private SortedSet(Comparator<T> comparator) {
+        this.contents = new TreeMap<>(comparator);
+    }
+
 
     @Override
     public boolean add(T value) {
@@ -51,7 +59,7 @@ public class SortedSet<T> extends AbstractSet<T> {
     @Override
     public boolean addAll(Collection<? extends T> collection) {
         boolean added = false;
-        for (T value : collection) {
+        for (var value : collection) {
             added = added | contents.put(value, true) == null;
         }
         return added;
@@ -84,12 +92,5 @@ public class SortedSet<T> extends AbstractSet<T> {
         return contents.keySet().size();
     }
 
-    private SortedSet() {
-        this.contents = new TreeMap<>();
-    }
-
-    private SortedSet(Comparator<T> comparator) {
-        this.contents = new TreeMap<>(comparator);
-    }
 
 }

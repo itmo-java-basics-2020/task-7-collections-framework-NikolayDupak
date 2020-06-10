@@ -3,6 +3,8 @@ package ru.ifmo.collections;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * Design a class to find the kth largest element in a stream. k is from 1 to numbers.length.
@@ -12,24 +14,25 @@ import java.util.LinkedList;
  * For each call to the method KthLargest.add(), return the element representing the kth largest element in the stream.
  */
 public class KthLargest {
-    LinkedList<Integer> listNumbers = new LinkedList();
-    int k;
+    private Queue<Integer> heap;
 
     public KthLargest(int k, int[] numbers) {
-        this.k = k - 1;
+        heap = new PriorityQueue<>();
         for (int number : numbers) {
-            this.listNumbers.add(number);
+            heap.add(number);
         }
 
+        while (heap.size() != k) {
+            heap.remove();
+        }
     }
 
     public int add(int val) {
-        listNumbers.add(val);
-        return KthElement();
+        if (val > heap.element()) {
+            heap.remove();
+            heap.add(val);
+        }
+        return heap.element();
     }
 
-    private int KthElement() {
-        Collections.sort(listNumbers);
-        return listNumbers.get(this.k);
-    }
 }
